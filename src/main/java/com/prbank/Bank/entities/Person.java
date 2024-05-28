@@ -31,9 +31,6 @@ public class Person {
     public Long getIdPerson() {
         return idPerson;
     }
-    public void setIdPerson(Long idPerson) {
-        this.idPerson = idPerson;
-    }
     public String getName() {
         return name;
     }

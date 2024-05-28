@@ -1,5 +1,6 @@
 package com.prbank.Bank.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class Account {
     @JsonBackReference
     private User user;
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Pocket> pockets = new ArrayList<>();
 
     public Account() {
@@ -72,5 +74,8 @@ public class Account {
 
     public void setPockets(List<Pocket> pockets) {
         this.pockets = pockets;
+        for(Pocket pocket : pockets) {
+            pocket.setAccount(this);
+        }
     }
 }
