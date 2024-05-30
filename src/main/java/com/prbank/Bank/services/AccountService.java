@@ -30,6 +30,16 @@ public class AccountService {
         }
         return null;
     }
+    public String deposit(String accountNumber,double amount){
+        Account accToDeposit = accountRepository.findByAccountNumber(accountNumber);
+        if (accToDeposit == null){
+            throw new RuntimeException("Account not found");
+        }
+        double newBalance = accToDeposit.getAccountInitialBalance() + amount;
+        accToDeposit.setAccountInitialBalance(newBalance);
+        accountRepository.save(accToDeposit);
+        return "Deposito Realizado";
+    }
     public void deleteAccount(Long idAccount){
         Account accountToDelete = accountRepository.findById(idAccount).orElse(null);
         if (accountToDelete==null){

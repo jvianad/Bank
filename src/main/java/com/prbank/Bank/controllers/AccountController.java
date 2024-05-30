@@ -1,5 +1,6 @@
 package com.prbank.Bank.controllers;
 import com.prbank.Bank.entities.Account;
+import com.prbank.Bank.entities.dto.DepositRequest;
 import com.prbank.Bank.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,5 +42,10 @@ public class AccountController {
     public ResponseEntity<Void> deleteAccountPocket(@PathVariable Long idAccount, @PathVariable Long idPocket){
         accountService.deleteAccountPocket(idAccount, idPocket);
         return ResponseEntity.noContent().build();
+    }
+    @PostMapping("/accounts/deposit/{accountNumber}")
+    public ResponseEntity<String> depositMoney(@PathVariable String accountNumber, @RequestBody DepositRequest account){
+        accountService.deposit(accountNumber,account.getAmount());
+        return ResponseEntity.ok("Deposito realizado");
     }
 }
