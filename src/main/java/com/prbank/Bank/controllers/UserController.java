@@ -1,7 +1,5 @@
 package com.prbank.Bank.controllers;
-import com.prbank.Bank.entities.Person;
 import com.prbank.Bank.entities.User;
-import com.prbank.Bank.services.PersonService;
 import com.prbank.Bank.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +20,9 @@ public class UserController {
         }
         return ResponseEntity.ok(allUsers);
     }
-    @PostMapping("/person/{idPerson}/users")
-    public ResponseEntity<User> createUser(@PathVariable Long idPerson,@RequestBody User user){
-        User createdUser = userService.createUser(idPerson,user);
+    @PostMapping("/users")
+    public ResponseEntity<User> createUser(@RequestBody User user){
+        User createdUser = userService.createUser(user);
         if (createdUser != null) {
             return ResponseEntity.ok(createdUser);
         } else {

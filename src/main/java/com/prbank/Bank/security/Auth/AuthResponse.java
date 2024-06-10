@@ -1,12 +1,14 @@
-package com.prbank.Bank.entities.dto;
+package com.prbank.Bank.security.Auth;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DepositRequest {
-    private double amount;
+public class AuthResponse {
+    private String token;
 }

@@ -1,68 +1,70 @@
 package com.prbank.Bank.entities;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 @Entity
 @Table(name = "users")
-public class User {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Data
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUser;
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
+    private String lastName;
+    @Column(nullable = false)
+    private String address;
     @Column(nullable = false,length = 15)
     private String username;
-    @Column(nullable = false,length = 20)
+    @Column(nullable = false)
     private String password;
     @Column(nullable = false,unique = true)
     private String email;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idPerson")
-    @JsonBackReference
-    private Person person;
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Account> accounts = new ArrayList<>();
-    public User() {
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(("ROLE_"+role.name())));
     }
-    public User(Long idUser, String username, String password, String email, List<Account> accounts) {
-        this.idUser = idUser;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.accounts = accounts;
-    }
-    public Long getIdUser() {
-        return idUser;
-    }
+    @Override
     public String getUsername() {
-        return username;
+        return email;
     }
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    @Override
     public String getPassword() {
         return password;
     }
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
-    public String getEmail() {
-        return email;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
-    public void setEmail(String email) {
-        this.email = email;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
-    public Person getPerson() {
-        return person;
-    }
-    public void setPerson(Person person) {
-        this.person = person;
-    }
-    public List<Account> getAccounts() {
-        return accounts;
-    }
-    public void setAccounts(List<Account> accounts) {
-        this.accounts = accounts;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
